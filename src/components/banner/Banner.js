@@ -2,12 +2,16 @@ import React from "react";
 import useSWR from "swr";
 import { fetcher } from "../../config";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Button from "../button/Button";
+import { useNavigate } from "react-router-dom";
 
 const Banner = () => {
   const { data } = useSWR(
     `https://api.themoviedb.org/3/movie/upcoming?api_key=e5f72b93f58d251ba292afef901c2c26`,
     fetcher
   );
+  console.log("Banner ~ data", data);
+
   const movies = data?.results || [];
   return (
     <section className="banner h-[500px] page-container mb-20 overflow-hidden">
@@ -23,7 +27,9 @@ const Banner = () => {
   );
 };
 function BannerItem({ item }) {
-  const { title, poster_path } = item;
+  const { title, poster_path, id, overview } = item;
+  const navigation = useNavigate();
+
   return (
     <div className="relative w-full h-full rounded-lg">
       <div
@@ -48,9 +54,23 @@ function BannerItem({ item }) {
             Drama
           </span>
         </div>
-        <button className="px-6 py-3 font-medium text-white rounded-lg bg-primary">
-          Watch Now:))
-        </button>
+        {/* <div className="mb-5 w-full max-w-[300px]">
+          <p>{overview}</p>
+        </div> */}
+        {/* {genres.length > 0 && (
+          <div className="flex items-center justify-center mb-10 gap-x-5">
+            {genres.map((items) => (
+              <span
+                key={items.id}
+                className="px-4 py-2 border rounded-lg text-primary border-primary"
+              >
+                {items.name}
+              </span>
+            ))}
+          </div>
+        )} */}
+
+        <Button onClick={() => navigation(`/movie/${id}`)}>Watch Now</Button>
       </div>
     </div>
   );
